@@ -80,7 +80,8 @@
 			</form>
 		</div>
 		<div id="review_model" ng-show="BC.progress_current == BC.progress_max">
-			here ill show you all the questions and your repsponses to them, with a link to jump back to a question to change it
+			Review your responses to the questions, click the button to go back and change response.
+			<br>
 			<div ng-repeat="aEntry in BC.survey">
 				<div class="review-entry-question">
 					{{aEntry.question}}
@@ -100,6 +101,9 @@
 					Change Response for Question {{$index + 1}}
 				</button>
 			</div>
+			<br>
+			<br>
+			<i>There is no submission in this demo</i>
 		</div>
 	</body>
 </html>

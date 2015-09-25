@@ -18,3 +18,19 @@ textarea {
 	font-weight: bold;
 	cursor: pointer;
 }
+
+.review-entry-question {
+	margin-top: 1.5em;
+}
+
+#question::before,
+.review-entry-question::before {
+	content: 'Q.';
+	font-weight: bold;
+}
+
+.review-entry-response::before {
+	content: 'Your response:';
+	font-weight: bold;
+	display: block;
+}

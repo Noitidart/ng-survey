@@ -68,7 +68,7 @@ var	ANG_APP = angular.module('surveyengine', [])
 			if (MODULE.building.type != 'textarea') {
 				var builtOptionsArr = [];
 				for (var p in MODULE.building.options) {
-					if (builtOptionsArr.indexOf(p) > -1) {
+					if (builtOptionsArr.indexOf(MODULE.building.options[p]) > -1) {
 						// dont add duplicates
 						continue;
 					}
