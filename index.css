@@ -7,7 +7,14 @@ textarea {
 	height: 150px;
 }
 
-.ng-invalid label:last-of-type::after {
+#question_model .ng-invalid label:last-of-type::after,
+#welcome .ng-invalid .ng-invalid + span::after {
 	content: 'REQUIRED';
 	background-color: red;
+}
+
+.remove-option {
+	color: red;
+	font-weight: bold;
+	cursor: pointer;
 }

@@ -8,12 +8,44 @@
 	<body ng-controller="BodyController as BC">
 		<h1>A Survey</h1>
 		<div id="welcome" ng-show="BC.progress_current == -1">
-			Welcome. This survey has {{BC.progress_max}} questions. Click ready to start.
-			<br/>
-			<br/>
-			<button ng-click="BC.next()">
-				Start Survey
-			</button>
+			Welcome to Survey Builder. Add questions to the survey, then take the survey yourself.
+			<br>
+			<br>
+			<form name="survey_builder" ng-submit="survey_builder.$valid && BC.addBuild()" novalidate>
+				<label>
+					Question
+					<input type="text" ng-model="BC.building.question" required />
+					<span></span>
+				</label>
+				<br>
+				<label>
+					Type
+					<select ng-model="BC.building.type" ng-options="key as aOptName for (key, aOptName) in BC.buildTypeOptions" required ng-change="BC.buildTypeChanged()"></select>
+					<span></span>
+				</label>
+				<input type="button" value="Add Option" ng-click="BC.addBuildOption()" ng-show="BC.building.type && BC.building.type != 'textarea'"/>
+				<div ng-show="BC.building.type && BC.building.type != 'textarea'">
+					<div ng-repeat="(aOptionKey, aOptionVal) in BC.building.options">
+						<label>
+							Option {{$index + 1}} <input type="text" ng-model="BC.building.options[aOptionKey]" class="build-option-entry" required>
+							<span></span>
+						</label>
+						<span ng-show="BC.shouldShowDelBuildOpt()" class="remove-option" ng-click="BC.removeBuildOptionElement(aOptionKey)">Delete</span>
+					</div>
+				</div>
+				<br>
+				<input type="submit" value="Add Question to Survey" ng-disabled="!survey_builder.$valid"/>
+			</form>
+			<div ng-show="BC.progress_max > 0">
+				This survey has {{BC.progress_max}} questions.
+				<br>
+				Click below to complete the building and start the survey.
+				<br>
+				<br>
+				<button ng-click="BC.next()">
+					Start Survey
+				</button>
+			</div>
 		</div>
 		<div id="question_model" ng-show="BC.progress_current >= 0 && BC.progress_current < BC.progress_max">
 			<span id="progress">
@@ -58,8 +90,11 @@
 					<div ng-show="aEntry.type != 'check'">
 						{{aEntry.response}}
 					</div>
-					<div ng-show="aEntry.type == 'check' && aResponseBool" ng-repeat="(aResponseI, aResponseBool) in aEntry.response">
-						{{aEntry.options[aResponseI]}}
+					<div ng-show="aEntry.type == 'check'">
+						<div ng-show="!BC.allCheckValuesFalse(aEntry.response) && aResponseBool" ng-repeat="(aResponseI, aResponseBool) in aEntry.response">
+							{{aEntry.options[aResponseI]}}
+						</div>
+						{{BC.allCheckValuesFalse(aEntry.response) ? 'NO ITEMS CHECKED' : ''}}
 					</div>
 				</div>
 				<button ng-click="BC.reviewQuestion($index)">
