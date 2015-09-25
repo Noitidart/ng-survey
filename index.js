@@ -19,11 +19,20 @@ var	ANG_APP = angular.module('surveyengine', [])
 		MODULE.progress_current = -1; // holds the question/element number they are on
 		MODULE.progress_max = MODULE.survey.length;
 		
+		for (var i=0; i<MODULE.survey.length; i++) {
+			if (MODULE.survey[i].type == 'check') {
+				MODULE.survey[i].response = {};
+				for (var j=0; j<MODULE.survey[i].options.length; j++) {
+					MODULE.survey[i].response['' + j] = false;
+				}
+			}
+		}
+		
 		MODULE.getSubmitBtnText = function() {
 			if (MODULE.in_review) {
 				return 'Return to Review & Submit'
 			} else {
-				if (MODULE.progress_current != MODULE.progress_max) {
+				if (MODULE.progress_current != MODULE.progress_max - 1) {
 					return 'Next Question';
 				} else {
 					return 'Last Question - Review & Submit';

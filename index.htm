@@ -31,7 +31,7 @@
 				</div>
 				<div id="reponse_check" ng-show="BC.survey[BC.progress_current].type == 'check'">
 					<label ng-repeat="aEntry in BC.survey[BC.progress_current].options">
-						<input type="checkbox" value="aEntry" ng-model="BC.survey[BC.progress_current].response[$index]"/>
+						<input type="checkbox" ng-model="BC.survey[BC.progress_current].response[$index]" value="{{aEntry}}"/>
 						{{aEntry}}
 					</label>
 				</div>
