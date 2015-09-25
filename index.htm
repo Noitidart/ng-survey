@@ -1,0 +1,71 @@
+<html ng-app="surveyengine">
+	<head>
+		<title>A Survey</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+		<script src="angular.min.js"></script>
+		<script src="index.js"></script>
+	</head>
+	<body ng-controller="BodyController as BC">
+		<h1>A Survey</h1>
+		<div id="welcome" ng-show="BC.progress_current == -1">
+			Welcome. This survey has {{BC.progress_max}} questions. Click ready to start.
+			<br/>
+			<br/>
+			<button ng-click="BC.next()">
+				Start Survey
+			</button>
+		</div>
+		<div id="question_model" ng-show="BC.progress_current >= 0 && BC.progress_current < BC.progress_max">
+			<span id="progress">
+				Question {{BC.progress_current + 1}} of {{BC.progress_max}}
+			</span>
+			<form id="response" name="responseForm" ng-submit="responseForm.$valid && BC.next()" novalidate>
+				<input type="submit" ng-show="BC.progress_current <= BC.progress_max && responseForm.$valid" value="{{BC.getSubmitBtnText()}}" />
+				<button type="button" id="previous" ng-click="BC.previous()" ng-show="BC.progress_current > 0 && !BC.in_review">Previous Question</button>
+				<div id="question">{{BC.survey[BC.progress_current].question}}</div>
+				<div id="reponse_radio" ng-show="BC.survey[BC.progress_current].type == 'radio'">
+					<label ng-repeat="aEntry in BC.survey[BC.progress_current].options">
+						<input type="radio" value="{{aEntry}}" ng-model="BC.survey[BC.progress_current].response"/>
+						{{aEntry}}
+					</label>
+				</div>
+				<div id="reponse_check" ng-show="BC.survey[BC.progress_current].type == 'check'">
+					<label ng-repeat="aEntry in BC.survey[BC.progress_current].options">
+						<input type="checkbox" value="aEntry" ng-model="BC.survey[BC.progress_current].response[$index]"/>
+						{{aEntry}}
+					</label>
+				</div>
+				<div id="reponse_dropdown" ng-show="BC.survey[BC.progress_current].type == 'dropdown'">
+					<label>
+						<select ng-options="aOptName for aOptName in BC.survey[BC.progress_current].options" ng-model="BC.survey[BC.progress_current].response" required></select>
+					</label>
+				</div>
+				<div id="reponse_textarea" ng-show="BC.survey[BC.progress_current].type == 'textarea'">
+					<label>
+						<textarea ng-model="BC.survey[BC.progress_current].response" required></textarea>
+					</label>
+				</div>
+				<div>responseForm is {{responseForm.$valid}}</div>
+			</form>
+		</div>
+		<div id="review_model" ng-show="BC.progress_current == BC.progress_max">
+			here ill show you all the questions and your repsponses to them, with a link to jump back to a question to change it
+			<div ng-repeat="aEntry in BC.survey">
+				<div class="review-entry-question">
+					{{aEntry.question}}
+				</div>
+				<div class="review-entry-response">
+					<div ng-show="aEntry.type != 'check'">
+						{{aEntry.response}}
+					</div>
+					<div ng-show="aEntry.type == 'check' && aResponseBool" ng-repeat="(aResponseI, aResponseBool) in aEntry.response">
+						{{aEntry.options[aResponseI]}}
+					</div>
+				</div>
+				<button ng-click="BC.reviewQuestion($index)">
+					Change Response for Question {{$index + 1}}
+				</button>
+			</div>
+		</div>
+	</body>
+</html>
