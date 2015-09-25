@@ -3,6 +3,21 @@ var	ANG_APP = angular.module('surveyengine', [])
 		
 		var MODULE = this;
 		
+		MODULE.survey = [ // array of objects, each object is a question, as user answers question it adds "response" field to the element
+			// question is a string, which holds what to ask the user with
+			// type radio/check/dropdown have options element, this is an array of strings that each option is labeled with
+			// {type:'radio', options:[must have at least 1], question:''},
+			// {type:'check', options:[must have at least 1], question:''},
+			// {type:'dropdown', options:[must have at least 1], question:''},
+			// {type:'textarea', question:''},
+			// // {type:'radio', options:['radio1', 'radio2'], question:'pick one of the radio buttons as a response'},
+			// // {type:'check', options:['check1', 'check2'], question:'pick multiple responses from checkboxes'},
+			// // {type:'dropdown', options:['drop1', 'drop2'], question:'pick from dropdown a response'},
+			// // {type:'textarea', question:'this is open ended type something'}
+		];
+		
+		// start - survey builder code
+		
 		MODULE.buildTypeOptions = {
 			textarea: 'Openended',
 			radio: 'Radio',
@@ -72,20 +87,12 @@ var	ANG_APP = angular.module('surveyengine', [])
 			MODULE.building = {};
 			
 			MODULE.progress_max = MODULE.survey.length;
-		}
+		};
 		
-		MODULE.survey = [ // array of objects, each object is a question, as user answers question it adds "response" field to the element
-			// question is a string, which holds what to ask the user with
-			// type radio/check/dropdown have options element, this is an array of strings that each option is labeled with
-			// {type:'radio', options:[], question:''},
-			// {type:'check', options:[], question:''},
-			// {type:'dropdown', options:[], question:''},
-			// {type:'textarea', question:''},
-			// {type:'radio', options:['radio1', 'radio2'], question:'pick one of the radio buttons as a response'},
-			// {type:'check', options:['check1', 'check2'], question:'pick multiple responses from checkboxes'},
-			// {type:'dropdown', options:['drop1', 'drop2'], question:'pick from dropdown a response'},
-			// {type:'textarea', question:'this is open ended type something'}
-		];
+		// end - survey builder code
+		
+		// start - taking and reviewing the survey code
+
 		
 		MODULE.progress_current = -1; // holds the question/element number they are on
 		MODULE.progress_max = MODULE.survey.length;
@@ -100,6 +107,7 @@ var	ANG_APP = angular.module('surveyengine', [])
 		}
 		
 		MODULE.getSubmitBtnText = function() {
+			// purely ng-gui function
 			if (MODULE.in_review) {
 				return 'Return to Review & Submit'
 			} else {
@@ -141,6 +149,7 @@ var	ANG_APP = angular.module('surveyengine', [])
 		};
 		
 		MODULE.allCheckValuesFalse = function(aResponse) {
+			// purely ng-gui function
 			// for the reiview, to determine if should display "NONE" in review for checkboxes
 			for (var a in aResponse) {
 				if (aResponse[a] == true) {
@@ -148,5 +157,7 @@ var	ANG_APP = angular.module('surveyengine', [])
 				}
 			}
 			return true;
-		}
+		};
+		
+		// end - taking and reviewing the survey code
 	}]);
